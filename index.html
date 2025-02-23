@@ -1,0 +1,48 @@
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Fire Stick Remote</title>
+        <style>
+            button {
+                padding: 20px;
+                margin: 5px;
+                font-size: 16px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Fire Stick Remote</h1>
+        <button onclick="sendCommand('input keyevent 19')">Up</button><br>
+        <button onclick="sendCommand('input keyevent 20')">Down</button><br>
+        <button onclick="sendCommand('input keyevent 21')">Left</button><br>
+        <button onclick="sendCommand('input keyevent 22')">Right</button><br>
+        <button onclick="sendCommand('input keyevent 4')">Back</button><br>
+        <button onclick="sendCommand('input keyevent 3')">Home</button><br>
+        <button onclick="sendCommand('input keyevent 85')">Play/Pause</button><br>
+        <input type="text" id="customCommand" placeholder="Custom ADB Command"><br>
+        <button onclick="sendCustomCommand()">Send Custom Command</button>
+
+        <script>
+            function sendCommand(command) {
+                fetch('/adb', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ command: command }),
+                })
+                .then(response => response.text())
+                .then(data => console.log(data)); // Optional: log the response
+            }
+
+            function sendCustomCommand() {
+                const command = document.getElementById('customCommand').value;
+                if (command) {
+                    sendCommand(command);
+                    document.getElementById('customCommand').value = ''; // Clear input
+                }
+            }
+
+        </script>
+    </body>
+    </html>
